@@ -70,7 +70,12 @@ class OkApi
     postData['application_key'] = requestOptions['applicationKey']
 
     sortedParams = parametrize(postData)
-    secret = md5(requestOptions['accessToken'] + requestOptions['applicationSecretKey'])
+    # if access token is presented secret = MD5(accessToken + applicationSecretKey)
+    if requestOptions['accessToken']? and requestOptions['accessToken'] isnt ''
+      secret = md5(requestOptions['accessToken'] + requestOptions['applicationSecretKey'])
+    # if access token is NOT presented secret = applicationSecretKey
+    else
+      secret = requestOptions['applicationSecretKey']
 
     md5(sortedParams + secret)
 
